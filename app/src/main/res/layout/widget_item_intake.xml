@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_item_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:padding="4dp"
-    android:background="@drawable/widget_item_background">
+    android:paddingStart="0dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingEnd="12dp"
+    android:background="@drawable/widget_item_bg_pending">
 
+    <!-- Vertical status indicator bar -->
+    <View
+        android:id="@+id/widget_item_indicator"
+        android:layout_width="4dp"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/widget_indicator_pending" />
+
+    <!-- Text content section -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_toEndOf="@id/widget_item_indicator"
+        android:layout_toStartOf="@id/btn_widget_check"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_centerVertical="true"
         android:orientation="vertical">
 
         <TextView
@@ -22,23 +38,34 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/widget_med_time"
+            android:id="@+id/widget_med_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/text_secondary"
-            android:textSize="11sp" />
+            android:textSize="11sp"
+            android:layout_marginTop="2dp" />
+
+        <!-- Maintain reference for backward compatibility (hidden) -->
+        <TextView
+            android:id="@+id/widget_med_time"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
     </LinearLayout>
 
+    <!-- Interactive action / status button -->
     <ImageView
         android:id="@+id/btn_widget_check"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_check"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_circle_outline"
         android:background="@android:color/transparent"
-        android:contentDescription="Marcar como tomado"
-        android:tint="@color/text_secondary" />
+        android:tint="@color/primary"
+        android:contentDescription="Marcar como tomado" />
 
-    <!-- Hidden indicators, replaced by text labels -->
+    <!-- Hidden indicators to avoid compilation/runtime crashes -->
     <ImageView
         android:id="@+id/iv_widget_checked"
         android:layout_width="0dp"
@@ -51,4 +78,4 @@
         android:layout_height="0dp"
         android:visibility="gone" />
 
-</LinearLayout>
+</RelativeLayout>

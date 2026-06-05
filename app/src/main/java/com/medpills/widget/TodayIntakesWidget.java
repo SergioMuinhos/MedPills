@@ -12,6 +12,11 @@ import com.medpills.R;
 import com.medpills.database.DatabaseClient;
 import com.medpills.database.IntakeLog;
 import com.medpills.database.Medication;
+import com.medpills.database.Schedule;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TodayIntakesWidget extends AppWidgetProvider {
 
@@ -43,7 +48,68 @@ public class TodayIntakesWidget extends AppWidgetProvider {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         views.setPendingIntentTemplate(R.id.widget_list, clickPendingIntent);
 
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        // Fetch counts and update subtitle asynchronously
+        DatabaseClient.getInstance(context).executor().execute(() -> {
+            try {
+                Date now = new Date();
+                long start = com.medpills.utils.DateTimeUtils.getStartOfDay(now);
+                long end = com.medpills.utils.DateTimeUtils.getEndOfDay(now);
+
+                List<Medication> medications = DatabaseClient.getInstance(context).db().medicationDao().getAllMedications();
+                List<Schedule> allSchedules = DatabaseClient.getInstance(context).db().scheduleDao().getAllSchedules();
+                List<IntakeLog> logs = DatabaseClient.getInstance(context).db().intakeLogDao().getLogsFilteredAcrossProfiles(start, end);
+
+                int totalCount = 0;
+                int takenCount = 0;
+                int pendingCount = 0;
+
+                Map<Long, Medication> medMap = new HashMap<>();
+                for (Medication med : medications) {
+                    medMap.put(med.getId(), med);
+                }
+
+                for (Schedule sched : allSchedules) {
+                    if (sched.getEndDateMillis() != null && sched.getEndDateMillis() < start) continue;
+                    Medication med = medMap.get(sched.getMedicationId());
+                    if (med == null) continue;
+
+                    List<Long> scheduledTimes = com.medpills.utils.ScheduleCalculator.calculateScheduledTimesForDay(sched, now);
+                    for (long schedTime : scheduledTimes) {
+                        totalCount++;
+                        boolean foundLog = false;
+                        for (IntakeLog log : logs) {
+                            if (log.getMedicationId() == med.getId() && log.getScheduledTimeMillis() == schedTime) {
+                                foundLog = true;
+                                if ("TAKEN".equals(log.getStatus())) {
+                                    takenCount++;
+                                }
+                                break;
+                            }
+                        }
+                        if (!foundLog) {
+                            pendingCount++;
+                        }
+                    }
+                }
+
+                String subtitle;
+                if (totalCount == 0) {
+                    subtitle = "Sin tomas programadas";
+                } else if (pendingCount == 0) {
+                    subtitle = "¡Todo al día! (" + takenCount + "/" + totalCount + " tomados) 🎉";
+                } else {
+                    subtitle = pendingCount + " pendiente" + (pendingCount > 1 ? "s" : "") + " (" + takenCount + "/" + totalCount + " completados)";
+                }
+
+                views.setTextViewText(R.id.widget_subtitle, subtitle);
+                appWidgetManager.updateAppWidget(appWidgetId, views);
+            } catch (Exception e) {
+                android.util.Log.e("TodayIntakesWidget", "Error updating widget subtitle", e);
+                // Fallback in case of database errors
+                views.setTextViewText(R.id.widget_subtitle, "Tomas de hoy");
+                appWidgetManager.updateAppWidget(appWidgetId, views);
+            }
+        });
     }
 
     @Override

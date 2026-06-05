@@ -49,16 +49,22 @@ public class TodayIntakesService extends RemoteViewsService {
 
                 Log.d("TodayIntakesFactory", "Filtering from " + start + " to " + end);
 
-                // Efficiently fetch all data
+                // Fetch all data from database
                 List<Medication> medications = DatabaseClient.getInstance(context).db().medicationDao().getAllMedications();
                 List<Schedule> allSchedules = DatabaseClient.getInstance(context).db().scheduleDao().getAllSchedules();
                 List<IntakeLog> logs = DatabaseClient.getInstance(context).db().intakeLogDao().getLogsFilteredAcrossProfiles(start, end);
+                List<com.medpills.database.Profile> profiles = DatabaseClient.getInstance(context).db().profileDao().getAllProfiles();
 
                 Log.d("TodayIntakesFactory", "Meds: " + medications.size() + ", Scheds: " + allSchedules.size() + ", Logs: " + logs.size());
 
                 Map<Long, Medication> medMap = new HashMap<>();
                 for (Medication med : medications) {
                     medMap.put(med.getId(), med);
+                }
+
+                Map<Long, String> profileMap = new HashMap<>();
+                for (com.medpills.database.Profile profile : profiles) {
+                    profileMap.put(profile.getId(), profile.getName());
                 }
 
                 for (Schedule sched : allSchedules) {
@@ -70,7 +76,16 @@ public class TodayIntakesService extends RemoteViewsService {
                     List<Long> scheduledTimes = ScheduleCalculator.calculateScheduledTimesForDay(sched, now);
                     for (long schedTime : scheduledTimes) {
                         String status = getLogStatus(logs, med.getId(), schedTime);
-                        items.add(new WidgetIntakeItem(med.getId(), med.getName(), schedTime, status));
+                        String profileName = profileMap.getOrDefault(med.getProfileId(), "Principal");
+                        items.add(new WidgetIntakeItem(
+                                med.getId(), 
+                                med.getName(), 
+                                schedTime, 
+                                status,
+                                med.getDosageQuantity(),
+                                med.getDosageUnit(),
+                                profileName
+                        ));
                     }
                 }
                 items.sort((a, b) -> Long.compare(a.time, b.time));
@@ -105,46 +120,67 @@ public class TodayIntakesService extends RemoteViewsService {
             
             WidgetIntakeItem item = items.get(position);
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_item_intake);
-            rv.setTextViewText(R.id.widget_med_time, timeFormat.format(new Date(item.time)));
+            
+            // Format time, dosage, and profile info
+            String timeStr = timeFormat.format(new Date(item.time));
+            String dosageStr = (item.dosageQuantity % 1 == 0) 
+                    ? String.valueOf((int) item.dosageQuantity) 
+                    : String.valueOf(item.dosageQuantity);
+            String desc = timeStr + "  •  " + dosageStr + " " + item.dosageUnit + "  •  " + item.profileName;
+            rv.setTextViewText(R.id.widget_med_desc, desc);
 
             String status = item.status;
             if ("TAKEN".equals(status)) {
-                // If taken, hide click button and other indicators, just show dimmed text
-                rv.setViewVisibility(R.id.btn_widget_check, android.view.View.GONE);
-                rv.setViewVisibility(R.id.iv_widget_checked, android.view.View.GONE);
-                rv.setViewVisibility(R.id.iv_widget_skipped, android.view.View.GONE);
+                // Apply TAKEN status style
+                rv.setInt(R.id.widget_item_container, "setBackgroundResource", R.drawable.widget_item_bg_taken);
+                rv.setInt(R.id.widget_item_indicator, "setBackgroundResource", R.drawable.widget_indicator_taken);
                 
                 rv.setTextViewText(R.id.widget_med_name, item.name + " (Tomado)");
                 rv.setTextColor(R.id.widget_med_name, context.getColor(R.color.text_secondary));
+                rv.setTextColor(R.id.widget_med_desc, context.getColor(R.color.text_secondary));
+                
+                rv.setImageViewResource(R.id.btn_widget_check, R.drawable.ic_check_circle);
+                rv.setInt(R.id.btn_widget_check, "setColorFilter", context.getColor(R.color.success));
+                rv.setOnClickFillInIntent(R.id.btn_widget_check, null); // Clear click intent
             } else if ("SKIPPED".equals(status)) {
-                // If skipped, hide click button and other indicators, just show dimmed text
-                rv.setViewVisibility(R.id.btn_widget_check, android.view.View.GONE);
-                rv.setViewVisibility(R.id.iv_widget_checked, android.view.View.GONE);
-                rv.setViewVisibility(R.id.iv_widget_skipped, android.view.View.GONE);
+                // Apply SKIPPED status style
+                rv.setInt(R.id.widget_item_container, "setBackgroundResource", R.drawable.widget_item_bg_skipped);
+                rv.setInt(R.id.widget_item_indicator, "setBackgroundResource", R.drawable.widget_indicator_skipped);
                 
                 rv.setTextViewText(R.id.widget_med_name, item.name + " (Omitido)");
                 rv.setTextColor(R.id.widget_med_name, context.getColor(R.color.text_secondary));
+                rv.setTextColor(R.id.widget_med_desc, context.getColor(R.color.text_secondary));
+                
+                rv.setImageViewResource(R.id.btn_widget_check, R.drawable.ic_cancel_circle);
+                rv.setInt(R.id.btn_widget_check, "setColorFilter", context.getColor(R.color.error));
+                rv.setOnClickFillInIntent(R.id.btn_widget_check, null); // Clear click intent
             } else if ("POSTPONED".equals(status)) {
-                // If postponed, keep check button active, show warning color
-                rv.setViewVisibility(R.id.btn_widget_check, android.view.View.VISIBLE);
-                rv.setViewVisibility(R.id.iv_widget_checked, android.view.View.GONE);
-                rv.setViewVisibility(R.id.iv_widget_skipped, android.view.View.GONE);
+                // Apply POSTPONED status style
+                rv.setInt(R.id.widget_item_container, "setBackgroundResource", R.drawable.widget_item_bg_postponed);
+                rv.setInt(R.id.widget_item_indicator, "setBackgroundResource", R.drawable.widget_indicator_postponed);
                 
                 rv.setTextViewText(R.id.widget_med_name, item.name + " (Pospuesto)");
                 rv.setTextColor(R.id.widget_med_name, context.getColor(R.color.warning));
+                rv.setTextColor(R.id.widget_med_desc, context.getColor(R.color.text_secondary));
+                
+                rv.setImageViewResource(R.id.btn_widget_check, R.drawable.ic_clock_outline);
+                rv.setInt(R.id.btn_widget_check, "setColorFilter", context.getColor(R.color.warning));
                 
                 Intent fillInIntent = new Intent();
                 fillInIntent.putExtra(TodayIntakesWidget.EXTRA_MED_ID, item.id);
                 fillInIntent.putExtra(TodayIntakesWidget.EXTRA_SCHED_TIME, item.time);
                 rv.setOnClickFillInIntent(R.id.btn_widget_check, fillInIntent);
             } else {
-                // If pending, show click button, hide checked/skipped indicators, normal text color
-                rv.setViewVisibility(R.id.btn_widget_check, android.view.View.VISIBLE);
-                rv.setViewVisibility(R.id.iv_widget_checked, android.view.View.GONE);
-                rv.setViewVisibility(R.id.iv_widget_skipped, android.view.View.GONE);
+                // Apply PENDING status style (default)
+                rv.setInt(R.id.widget_item_container, "setBackgroundResource", R.drawable.widget_item_bg_pending);
+                rv.setInt(R.id.widget_item_indicator, "setBackgroundResource", R.drawable.widget_indicator_pending);
                 
                 rv.setTextViewText(R.id.widget_med_name, item.name);
                 rv.setTextColor(R.id.widget_med_name, context.getColor(R.color.text_primary));
+                rv.setTextColor(R.id.widget_med_desc, context.getColor(R.color.text_secondary));
+                
+                rv.setImageViewResource(R.id.btn_widget_check, R.drawable.ic_circle_outline);
+                rv.setInt(R.id.btn_widget_check, "setColorFilter", context.getColor(R.color.primary));
                 
                 Intent fillInIntent = new Intent();
                 fillInIntent.putExtra(TodayIntakesWidget.EXTRA_MED_ID, item.id);
@@ -175,11 +211,17 @@ public class TodayIntakesService extends RemoteViewsService {
         String name;
         long time;
         String status;
-        WidgetIntakeItem(long id, String name, long time, String status) {
+        double dosageQuantity;
+        String dosageUnit;
+        String profileName;
+        WidgetIntakeItem(long id, String name, long time, String status, double dosageQuantity, String dosageUnit, String profileName) {
             this.id = id;
             this.name = name;
             this.time = time;
             this.status = status;
+            this.dosageQuantity = dosageQuantity;
+            this.dosageUnit = dosageUnit;
+            this.profileName = profileName;
         }
     }
 }
