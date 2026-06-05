@@ -168,28 +168,26 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager == null) return;
 
-        // Build notification channel for API 26+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Recordatorios de Medicamentos",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            channel.setDescription("Alarmas críticas para la toma de medicamentos");
-            channel.enableVibration(true);
-            channel.setVibrationPattern(new long[]{0, 500, 200, 500});
-            
-            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            if (defaultSoundUri == null) {
-                defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            }
-            channel.setSound(defaultSoundUri, new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build());
-
-            notificationManager.createNotificationChannel(channel);
+        // Build notification channel
+        NotificationChannel channel = new NotificationChannel(
+                CHANNEL_ID,
+                "Recordatorios de Medicamentos",
+                NotificationManager.IMPORTANCE_HIGH
+        );
+        channel.setDescription("Alarmas críticas para la toma de medicamentos");
+        channel.enableVibration(true);
+        channel.setVibrationPattern(new long[]{0, 500, 200, 500});
+        
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (defaultSoundUri == null) {
+            defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
+        channel.setSound(defaultSoundUri, new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build());
+
+        notificationManager.createNotificationChannel(channel);
 
         // Action Intents
         Intent takenIntent = new Intent(context, AlarmReceiver.class);

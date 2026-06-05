@@ -33,12 +33,10 @@ public class AlarmHelper {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
-        // Check if we can schedule exact alarms (Android 14+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                Log.w(TAG, "Cannot schedule exact alarms - permission not granted.");
-                return;
-            }
+        // Check if we can schedule exact alarms
+        if (!alarmManager.canScheduleExactAlarms()) {
+            Log.w(TAG, "Cannot schedule exact alarms - permission not granted.");
+            return;
         }
 
         long nextTriggerMillis = calculateNextTriggerTime(schedule, afterMillis);

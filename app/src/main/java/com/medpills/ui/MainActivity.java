@@ -122,15 +122,12 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
-        // alarmManager.canScheduleExactAlarms() is available starting SDK 31 (Android 12)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                // Halt flow and display non-dismissible dialog
-                showExactAlarmGuardDialog();
-            } else {
-                // If it is granted, make sure the dialog is dismissed
-                dismissExactAlarmGuardDialog();
-            }
+        if (!alarmManager.canScheduleExactAlarms()) {
+            // Halt flow and display non-dismissible dialog
+            showExactAlarmGuardDialog();
+        } else {
+            // If it is granted, make sure the dialog is dismissed
+            dismissExactAlarmGuardDialog();
         }
     }
 
@@ -145,11 +142,9 @@ public class MainActivity extends AppCompatActivity {
                 .setCancelable(false) // Non-dismissible
                 .setPositiveButton(R.string.exact_alarm_settings_btn, (dialog, which) -> {
                     // Redirect directly to system settings panel for exact alarms
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-                        intent.setData(Uri.fromParts("package", getPackageName(), null));
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                    intent.setData(Uri.fromParts("package", getPackageName(), null));
+                    startActivity(intent);
                 })
                 .create();
 

@@ -64,9 +64,17 @@ La aplicación se ha desarrollado bajo estrictas guías arquitectónicas para ga
 ## 🚀 Requisitos y Configuración
 
 - **SDK Mínimo**: API 33 (Android 13 - Tiramisu)
-- **SDK Objetivo**: API 35 (Android 15)
+- **SDK de Compilación**: API 37 (Android 17 - Cinnamon Bun)
+- **SDK Objetivo (targetSdk)**: API 37 (Android 17)
 - **IDE**: Android Studio Koala / Ladybug o superior
 - **JDK**: Java 21 o superior
+
+### 🔄 Retrocompatibilidad y Soporte para Android 13 (API 33)+
+MedPills utiliza al máximo el potencial del SDK 37 (Android 17) sin perder la compatibilidad con Android 13. Esto se logra mediante el uso de librerías de Jetpack de última generación y APIs seguras:
+- **Diseño Inmersivo (Edge-to-Edge):** Emplea `androidx.activity.EdgeToEdge` y controladores de inserción `WindowInsetsCompat`. De esta manera, el contenido se dibuja de forma fluida por debajo de las barras del sistema (estado y navegación), adaptándose a los estándares obligatorios de Android 15-17 mientras se renderiza correctamente en Android 13.
+- **Selector de Fotos Seguro (Photo Picker):** Integra `ActivityResultContracts.PickVisualMedia()`, garantizando la carga de fotos de perfil de forma segura. En Android 13+ utiliza el selector de fotos nativo del sistema sin necesidad de solicitar permisos globales de lectura de archivos (`READ_EXTERNAL_STORAGE` o `READ_MEDIA_IMAGES`).
+- **Gesto de Atrás Predictivo:** Declarado en el manifiesto con `android:enableOnBackInvokedCallback="true"`. Ofrece transiciones predictivas fluidas al deslizar para volver, compatible desde Android 13 (donde se introdujo la API original) en adelante.
+- **Gestión de Alarmas Exactas:** Utiliza `canScheduleExactAlarms()` de forma directa al ser una API nativa desde Android 12+, ofreciendo diálogos de redirección a la configuración del sistema para garantizar el disparo puntual de las alertas.
 
 ### Instalación local:
 1. Clona este repositorio:
