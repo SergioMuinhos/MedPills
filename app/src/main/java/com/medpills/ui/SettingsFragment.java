@@ -1,6 +1,8 @@
 package com.medpills.ui;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -85,6 +87,7 @@ public class SettingsFragment extends Fragment {
         unitManager = new UnitManager(requireContext());
 
         setupAppearanceCard();
+        setupLanguageCard();
         setupBatteryCard();
         setupBackupCard();
         setupUnitsCard();
@@ -155,6 +158,38 @@ public class SettingsFragment extends Fragment {
 
                 ThemeHelper.setSelectedTheme(requireContext(), theme);
                 ThemeHelper.applyTheme(theme);
+            }
+        });
+    }
+
+    private void setupLanguageCard() {
+        // Read current language selection
+        LocaleListCompat currentLocales = AppCompatDelegate.getApplicationLocales();
+        if (currentLocales.isEmpty()) {
+            binding.toggleLanguage.check(R.id.btn_lang_system);
+        } else {
+            String language = currentLocales.get(0).getLanguage();
+            if ("es".equals(language)) {
+                binding.toggleLanguage.check(R.id.btn_lang_es);
+            } else if ("en".equals(language)) {
+                binding.toggleLanguage.check(R.id.btn_lang_en);
+            } else {
+                binding.toggleLanguage.check(R.id.btn_lang_system);
+            }
+        }
+
+        binding.toggleLanguage.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                LocaleListCompat locales;
+                if (checkedId == R.id.btn_lang_es) {
+                    locales = LocaleListCompat.forLanguageTags("es");
+                } else if (checkedId == R.id.btn_lang_en) {
+                    locales = LocaleListCompat.forLanguageTags("en");
+                } else {
+                    locales = LocaleListCompat.getEmptyLocaleList();
+                }
+                
+                AppCompatDelegate.setApplicationLocales(locales);
             }
         });
     }

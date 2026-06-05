@@ -74,4 +74,10 @@
     <string name="log_status_taken">Tomado</string>
     <string name="log_status_skipped">Omitido</string>
     <string name="log_status_postponed">Pospuesto 15m</string>
+
+    <!-- Language Settings -->
+    <string name="language_title">Idioma de la Aplicación</string>
+    <string name="lang_system">Sistema</string>
+    <string name="lang_es">Español</string>
+    <string name="lang_en">English</string>
 </resources>
