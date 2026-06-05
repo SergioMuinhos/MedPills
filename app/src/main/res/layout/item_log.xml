@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_log"
+    style="@style/Widget.MedPills.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Medication Name -->
+        <TextView
+            android:id="@+id/tv_log_med_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Paracetamol"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary_light"
+            app:layout_constraintEnd_toStartOf="@id/card_log_status"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Profile Label -->
+        <TextView
+            android:id="@+id/tv_log_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Perfil: Usuario Principal"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/text_secondary_light"
+            app:layout_constraintEnd_toStartOf="@id/card_log_status"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_log_med_name" />
+
+        <!-- Recorded Timestamp -->
+        <TextView
+            android:id="@+id/tv_log_timestamp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="05 Jun 2026, 08:34"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary_light"
+            app:layout_constraintEnd_toStartOf="@id/card_log_status"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_log_profile" />
+
+        <!-- Status Card Badge -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_log_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_log_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="TOMADO"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

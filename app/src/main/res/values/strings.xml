@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MedPills</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_dashboard">Panel</string>
+    <string name="nav_logbook">Historial</string>
+    <string name="nav_settings">Ajustes</string>
+
+    <!-- Dashboard Screen -->
+    <string name="dashboard_title">Mis Tomas de Hoy</string>
+    <string name="profile_selector_title">Perfiles</string>
+    <string name="empty_intakes">No hay tomas programadas para hoy.</string>
+    <string name="swipe_to_take">Desliza derecha para tomar</string>
+    <string name="swipe_to_skip">Desliza izquierda para omitir</string>
+    <string name="medication_taken">Medicamento registrado como tomado</string>
+    <string name="medication_skipped">Medicamento registrado como omitido</string>
+    <string name="undo">DESHACER</string>
+    <string name="undo_success">Acción deshecha</string>
+    <string name="delete_log_title">Eliminar registro</string>
+    <string name="delete_log_msg">¿Deseas eliminar este registro? Se restaurará el stock del medicamento.</string>
+    <string name="delete">ELIMINAR</string>
+    <string name="cancel">CANCELAR</string>
+
+    <!-- Add Medication Screen -->
+    <string name="add_med_title">Añadir Medicamento</string>
+    <string name="med_name_hint">Nombre de la pastilla/medicamento</string>
+    <string name="dosage_quantity_hint">Cantidad de dosis (ej. 1, 1.5, 500)</string>
+    <string name="dosage_unit_hint">Unidad (ej. mg, pastillas, ml)</string>
+    <string name="current_stock_hint">Stock actual en inventario</string>
+    <string name="low_stock_threshold_hint">Límite de stock bajo para avisos</string>
+    <string name="frequency_label">Frecuencia</string>
+    <string name="time_selector_label">Horas programadas</string>
+    <string name="add_time_btn">Añadir Hora</string>
+    <string name="save_medication">Guardar Programación</string>
+    <string name="empty_fields_error">Por favor, rellene todos los campos obligatorios.</string>
+    <string name="invalid_number_error">Por favor, ingrese valores numéricos válidos.</string>
+    <string name="no_times_error">Por favor, añada al menos una hora para el recordatorio.</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_title">Ajustes Generales</string>
+    <string name="battery_optim_title">Optimización de Batería</string>
+    <string name="battery_optim_desc">El sistema Android puede restringir las alarmas exactas si la optimización está activada. Recomendamos desactivarla para MedPills.</string>
+    <string name="battery_optim_btn">Configurar Batería</string>
+    <string name="battery_optim_whitelist_active">Estado: No restringido (Correcto)</string>
+    <string name="battery_optim_whitelist_inactive">Estado: Restringido (Recomendado desactivar)</string>
+    
+    <string name="backup_title">Copia de Seguridad Local</string>
+    <string name="backup_desc">Exporta o importa toda tu base de datos de manera 100% local a un archivo JSON. Privacidad absoluta.</string>
+    <string name="export_btn">Exportar Base de Datos</string>
+    <string name="import_btn">Importar Base de Datos</string>
+    <string name="backup_success">Operación realizada con éxito</string>
+    <string name="backup_error">Error al procesar el archivo. Formato inválido o corrupto.</string>
+
+    <string name="profiles_title">Gestión de Perfiles</string>
+    <string name="add_profile_btn">Añadir Perfil</string>
+    <string name="profile_name_hint">Nombre del nuevo perfil</string>
+
+    <!-- Security & Alarms Dialogs -->
+    <string name="exact_alarm_alert_title">Permiso de Alarmas Exactas Obligatorio</string>
+    <string name="exact_alarm_alert_desc">MedPills requiere el permiso de Alarmas Exactas para poder enviarte los recordatorios en la hora exacta configurada. De lo contrario, no podemos garantizar la toma correcta de tus medicamentos.\n\nPor favor, pulsa el botón para ir a los Ajustes de Android y activar este permiso.</string>
+    <string name="exact_alarm_settings_btn">Abrir Ajustes</string>
+
+    <!-- Overdose Guard Dialog -->
+    <string name="overdose_alert_title">⚠️ Alerta de Posible Sobredosis</string>
+    <string name="overdose_alert_desc">Se ha detectado que ya registraste una toma de \"%1$s\" hace menos de 120 minutos.\n\n¿Estás seguro de que deseas registrar otra toma? Tomar medicamentos antes del intervalo seguro puede ser peligroso para tu salud.</string>
+    <string name="overdose_confirm">Confirmar Registro</string>
+    <string name="overdose_cancel">Cancelar Toma</string>
+
+    <!-- Logbook / History Screen -->
+    <string name="history_title">Historial de Tomas</string>
+    <string name="filter_profile">Perfil:</string>
+    <string name="filter_date">Fecha:</string>
+    <string name="log_status_taken">Tomado</string>
+    <string name="log_status_skipped">Omitido</string>
+    <string name="log_status_postponed">Pospuesto 15m</string>
+</resources>

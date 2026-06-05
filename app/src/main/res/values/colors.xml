@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Colors (Semantic names for Light/Dark toggling) -->
+    <color name="primary">#0E5AE6</color>
+    <color name="primary_variant">#0B47B3</color>
+    <color name="secondary">#00C9A7</color>
+    <color name="secondary_variant">#00967B</color>
+
+    <!-- Theme Colors (These will point to semantic light/dark values) -->
+    <color name="app_background">#F8FAFC</color>
+    <color name="app_surface">#E2E8F0</color>
+    <color name="glass_tint">#D9FFFFFF</color>
+    <color name="glass_border">#33FFFFFF</color>
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#475569</color>
+
+    <!-- Aliases for backward compatibility while refactoring layouts -->
+    <color name="background_light">@color/app_background</color>
+    <color name="surface_light">@color/app_surface</color>
+    <color name="glass_tint_light">@color/glass_tint</color>
+    <color name="glass_border_light">@color/glass_border</color>
+    <color name="text_primary_light">@color/text_primary</color>
+    <color name="text_secondary_light">@color/text_secondary</color>
+
+    <!-- Constant Semantic colors -->
+    <color name="error">#EF4444</color>
+    <color name="warning">#F59E0B</color>
+    <color name="success">#10B981</color>
+    <color name="shadow_color">#40000000</color>
+</resources>

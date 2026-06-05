@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="8dp">
+
+    <!-- Avatar Image -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/surface_light"
+        app:strokeWidth="1dp">
+
+        <ImageView
+            android:id="@+id/iv_profile_setting_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/avatar_default"
+            android:scaleType="centerCrop"
+            android:contentDescription="Avatar" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Name Label -->
+    <TextView
+        android:id="@+id/tv_profile_setting_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:text="Usuario"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:textColor="@color/text_primary_light" />
+
+    <!-- Delete Button -->
+    <ImageButton
+        android:id="@+id/btn_delete_profile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_delete"
+        android:contentDescription="Eliminar Perfil"
+        app:tint="@color/error" />
+
+</LinearLayout>

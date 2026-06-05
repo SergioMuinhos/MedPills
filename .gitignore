@@ -1,0 +1,27 @@
+# Built-in Gradle files
+.gradle
+build/
+app/build/
+
+# Android Studio / IntelliJ files
+*.iml
+.idea/workspace.xml
+.idea/libraries/
+.idea/caches/
+.idea/modules.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/shelf/
+.idea/runConfigurations/
+captures/
+
+# Local configuration files
+local.properties
+
+# Log files and crash reports
+*.log
+crashlytics/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
