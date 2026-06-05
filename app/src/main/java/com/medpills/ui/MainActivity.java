@@ -46,10 +46,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        androidx.activity.EdgeToEdge.enable(this);
         ThemeHelper.applySettingsTheme(this);
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Adjust bottom navigation padding to respect system bars (Edge-to-Edge insets)
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavigation, (v, insets) -> {
+            int bottomInsets = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars()).bottom;
+            v.setPadding(0, 0, 0, bottomInsets);
+            return insets;
+        });
 
         // Setup bottom navigation listener
         binding.bottomNavigation.setOnItemSelectedListener(item -> {

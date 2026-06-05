@@ -11,7 +11,10 @@
 
 ## ✨ Características Principales
 
-### 🎨 1. Interfaz Premium (Material 4 & Glassmorphism)
+### 🎨 1. Interfaz Inmersiva Premium (Material 4, Glassmorphism & SDK 37)
+- **Diseño Borde a Borde Nativo (Edge-to-Edge)**: Cumpliendo con los estándares modernos de Android 15 a 17 (API 35-37), la aplicación se dibuja de borde a borde por debajo de las barras transparentes de estado y de navegación del sistema, gestionado mediante controladores de insets de ventana (`WindowInsetsCompat`) para un acabado inmersivo sin solapamientos.
+- **Soporte para Gestos de Atrás Predictivos (Predictive Back)**: Declarado el soporte a nivel de sistema operativo (`enableOnBackInvokedCallback`) permitiendo transiciones suaves y predictivas al retroceder entre pantallas.
+- **Selector de Fotos Privado (Photo Picker)**: Integración nativa del moderno selector de fotos seguro de Android (`PickVisualMedia` de la API 33-37) para cargar fotos de perfil personalizadas, lo que garantiza el respeto estricto a la privacidad del usuario sin necesidad de solicitar permisos globales de almacenamiento.
 - **Efectos de Desenfoque en Tiempo Real**: Contenedores glassmórficos dinámicos mediante la API `RenderEffect` en Android 13+.
 - **Física de Materiales Realista**: Tarjetas interactivas con estados de elevación al tacto, micro-animaciones fluidas y transiciones orgánicas.
 - **Tematización Inteligente**: Soporte completo para temas Claro y Oscuro sincronizados con el sistema.

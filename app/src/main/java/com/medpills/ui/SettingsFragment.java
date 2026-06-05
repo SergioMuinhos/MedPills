@@ -40,9 +40,9 @@ public class SettingsFragment extends Fragment {
     private String selectedCustomImageUri;
     private View currentDialogView;
 
-    // Storage Access Framework Result Launchers
-    private final ActivityResultLauncher<String> pickImageLauncher =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+    // Storage Access Framework / Photo Picker Launcher (API 33-37 style)
+    private final ActivityResultLauncher<androidx.activity.result.PickVisualMediaRequest> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                 if (uri != null && currentDialogView != null) {
                     // Persist access to the URI
                     try {
@@ -272,7 +272,11 @@ public class SettingsFragment extends Fragment {
         selectedCustomImageUri = profile.getImageUri();
         updateDialogPhotoPreview(currentDialogView, selectedCustomImageUri);
 
-        btnPickGallery.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
+        btnPickGallery.setOnClickListener(v -> pickImageLauncher.launch(
+                new androidx.activity.result.PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build()
+        ));
 
         // Simple list of available avatar resources
         String[] avatarResNames = {"avatar_default", "avatar_1", "avatar_2", "avatar_3", "avatar_4"};

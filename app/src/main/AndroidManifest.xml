@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedPills"
-        tools:targetApi="34">
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="35">
 
         <!-- Main Activity -->
         <activity
