@@ -24,6 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = "AlarmReceiver";
     public static final String ACTION_MARK_TAKEN = "com.medpills.ACTION_MARK_TAKEN";
     public static final String ACTION_POSTPONE = "com.medpills.ACTION_POSTPONE";
+    public static final String ACTION_REFRESH_WIDGET = "com.medpills.ACTION_REFRESH_WIDGET";
     public static final String CHANNEL_ID = "medpills_notifications";
 
     @Override
@@ -38,6 +39,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                     handleMarkAsTaken(context, intent);
                 } else if (ACTION_POSTPONE.equals(action)) {
                     handlePostpone(context, intent);
+                } else if (ACTION_REFRESH_WIDGET.equals(action)) {
+                    handleRefreshWidget(context);
                 } else {
                     handleAlarmTrigger(context, intent);
                 }
@@ -161,6 +164,13 @@ public class AlarmReceiver extends BroadcastReceiver {
         if (notificationManager != null) {
             notificationManager.cancel((int) scheduleId);
         }
+    }
+
+    private void handleRefreshWidget(Context context) {
+        Log.d(TAG, "Refreshing widget from midnight alarm.");
+        com.medpills.widget.TodayIntakesWidget.notifyWidgetDataChanged(context);
+        // Reschedule for tomorrow
+        AlarmHelper.scheduleMidnightRefresh(context);
     }
 
     private void showNotification(Context context, long scheduleId, long medicationId, String medName,

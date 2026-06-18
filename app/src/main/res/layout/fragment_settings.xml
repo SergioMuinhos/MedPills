@@ -150,48 +150,83 @@
             android:layout_marginBottom="16dp"
             app:cardUseCompatPadding="true">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/battery_optim_title"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary_light"
-                    android:layout_marginBottom="4dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/battery_optim_desc"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="@color/text_secondary_light"
-                    android:layout_marginBottom="12dp" />
-
-                <TextView
-                    android:id="@+id/tv_battery_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Estado: Desconocido"
-                    android:textStyle="bold"
-                    android:textColor="@color/warning"
-                    android:layout_marginBottom="12dp" />
-
-                <Button
-                    android:id="@+id/btn_configure_battery"
-                    style="@style/Widget.MedPills.Button"
+                <!-- Request Layout (Inactive) -->
+                <LinearLayout
+                    android:id="@+id/layout_battery_request"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/battery_optim_btn"
-                    android:backgroundTint="@color/primary"
-                    android:textColor="#FFFFFF" />
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:visibility="visible">
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/battery_optim_title"
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary_light"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/battery_optim_desc"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="@color/text_secondary_light"
+                        android:layout_marginBottom="12dp" />
+
+                    <Button
+                        android:id="@+id/btn_configure_battery"
+                        style="@style/Widget.MedPills.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/battery_optim_btn"
+                        android:backgroundTint="@color/primary"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+
+                <!-- Verified Layout (Active) -->
+                <LinearLayout
+                    android:id="@+id/layout_battery_active"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="12dp"
+                    android:background="#10000000"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_check"
+                        app:tint="@color/success"
+                        android:layout_marginEnd="12dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Optimización de batería: Desactivada (Protegido)"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textStyle="bold"
+                        android:textColor="@color/success" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_reconfigure_battery"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cambiar"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary_light" />
+                </LinearLayout>
+            </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Card 2: Backup Manager -->

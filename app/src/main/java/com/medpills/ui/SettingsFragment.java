@@ -196,7 +196,7 @@ public class SettingsFragment extends Fragment {
 
     private void setupBatteryCard() {
         updateBatteryStatus();
-        binding.btnConfigureBattery.setOnClickListener(v -> {
+        View.OnClickListener batteryListener = v -> {
             Context context = requireContext();
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             if (pm != null) {
@@ -211,7 +211,10 @@ public class SettingsFragment extends Fragment {
                     startActivity(intent);
                 }
             }
-        });
+        };
+        
+        binding.btnConfigureBattery.setOnClickListener(batteryListener);
+        binding.btnReconfigureBattery.setOnClickListener(batteryListener);
     }
 
     private void updateBatteryStatus() {
@@ -222,11 +225,11 @@ public class SettingsFragment extends Fragment {
         if (pm != null) {
             boolean isIgnoring = pm.isIgnoringBatteryOptimizations(context.getPackageName());
             if (isIgnoring) {
-                binding.tvBatteryStatus.setText(R.string.battery_optim_whitelist_active);
-                binding.tvBatteryStatus.setTextColor(context.getColor(R.color.success));
+                binding.layoutBatteryRequest.setVisibility(View.GONE);
+                binding.layoutBatteryActive.setVisibility(View.VISIBLE);
             } else {
-                binding.tvBatteryStatus.setText(R.string.battery_optim_whitelist_inactive);
-                binding.tvBatteryStatus.setTextColor(context.getColor(R.color.error));
+                binding.layoutBatteryRequest.setVisibility(View.VISIBLE);
+                binding.layoutBatteryActive.setVisibility(View.GONE);
             }
         }
     }

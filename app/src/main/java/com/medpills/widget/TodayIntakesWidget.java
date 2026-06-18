@@ -34,6 +34,12 @@ public class TodayIntakesWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_today_intakes);
 
+        // Header click launches the main app
+        Intent mainIntent = new Intent(context, com.medpills.ui.MainActivity.class);
+        PendingIntent mainPendingIntent = PendingIntent.getActivity(context, 0, mainIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        views.setOnClickPendingIntent(R.id.widget_header_root, mainPendingIntent);
+
         Intent intent = new Intent(context, TodayIntakesService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));

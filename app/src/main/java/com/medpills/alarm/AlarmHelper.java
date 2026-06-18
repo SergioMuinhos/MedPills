@@ -17,12 +17,49 @@ public class AlarmHelper {
 
     public static void rescheduleAllAlarms(Context context) {
         Log.d(TAG, "Rescheduling all alarms.");
+        scheduleMidnightRefresh(context);
         DatabaseClient.getInstance(context).executor().execute(() -> {
             List<Schedule> schedules = DatabaseClient.getInstance(context).db().scheduleDao().getAllSchedules();
             for (Schedule schedule : schedules) {
                 scheduleNextAlarm(context, schedule);
             }
         });
+    }
+
+    public static void scheduleMidnightRefresh(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager == null || !alarmManager.canScheduleExactAlarms()) return;
+
+        Calendar midnight = Calendar.getInstance();
+        midnight.set(Calendar.HOUR_OF_DAY, 0);
+        midnight.set(Calendar.MINUTE, 0);
+        midnight.set(Calendar.SECOND, 1); // 1 second past midnight to be sure
+        midnight.set(Calendar.MILLISECOND, 0);
+        
+        if (midnight.getTimeInMillis() <= System.currentTimeMillis()) {
+            midnight.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.setAction(AlarmReceiver.ACTION_REFRESH_WIDGET);
+        
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                999999, // Unique request code for refresh
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        try {
+            alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    midnight.getTimeInMillis(),
+                    pendingIntent
+            );
+            Log.d(TAG, "Midnight refresh scheduled at: " + midnight.getTime().toString());
+        } catch (SecurityException e) {
+            Log.e(TAG, "Could not schedule midnight refresh", e);
+        }
     }
 
     public static void scheduleNextAlarm(Context context, Schedule schedule) {
