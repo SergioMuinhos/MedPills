@@ -5,14 +5,9 @@ plugins {
 // Load signing properties securely
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
-println "--- Gradle Keystore Debug ---"
-println "keystorePropertiesFile path: " + keystorePropertiesFile.absolutePath
-println "keystorePropertiesFile exists: " + keystorePropertiesFile.exists()
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-    println "Loaded properties keys: " + keystoreProperties.keySet()
 }
-println "-----------------------------"
 
 android {
     namespace 'com.medpills'
