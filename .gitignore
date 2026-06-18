@@ -25,3 +25,9 @@ crashlytics/
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# Keystores and local credentials
+keystore.properties
+*.jks
+*.keystore
+
