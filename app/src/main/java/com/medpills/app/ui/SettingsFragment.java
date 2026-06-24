@@ -197,19 +197,12 @@ public class SettingsFragment extends Fragment {
     private void setupBatteryCard() {
         updateBatteryStatus();
         View.OnClickListener batteryListener = v -> {
-            Context context = requireContext();
-            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            if (pm != null) {
-                try {
-                    // Try launching the direct request prompt (requires permission in manifest)
-                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-                    intent.setData(Uri.parse("package:" + context.getPackageName()));
-                    startActivity(intent);
-                } catch (Exception e) {
-                    // Fallback to open the general settings list if request fails
-                    Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-                    startActivity(intent);
-                }
+            try {
+                // Open the general ignore battery optimization settings list (compliant with Play Store)
+                Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                startActivity(intent);
+            } catch (Exception e) {
+                Log.e(TAG, "Error opening battery optimization settings", e);
             }
         };
         
