@@ -10,11 +10,11 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace 'com.medpills'
+    namespace 'com.medpills.app'
     compileSdk 37
 
     defaultConfig {
-        applicationId "com.medpills"
+        applicationId "com.medpills.app"
         minSdk 35
         targetSdk 37
         versionCode 3

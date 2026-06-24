@@ -62,7 +62,7 @@
             android:label="MedPills - Tomas de Hoy">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.medpills.widget.ACTION_CHECK" />
+                <action android:name="com.medpills.app.widget.ACTION_CHECK" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
