@@ -92,11 +92,20 @@ public class BackupManager {
                     return;
                 }
 
-                if (payload == null || payload.profiles == null || payload.medications == null ||
-                        payload.schedules == null || payload.intakeLogs == null) {
-                    Log.e(TAG, "JSON structural validation failed: Null structures detected.");
+                if (payload == null || payload.profiles == null) {
+                    Log.e(TAG, "JSON structural validation failed: Null profiles detected.");
                     mainHandler.post(() -> listener.onError(new IllegalArgumentException("El archivo de copia de seguridad no contiene la estructura requerida")));
                     return;
+                }
+
+                if (payload.medications == null) {
+                    payload.medications = new java.util.ArrayList<>();
+                }
+                if (payload.schedules == null) {
+                    payload.schedules = new java.util.ArrayList<>();
+                }
+                if (payload.intakeLogs == null) {
+                    payload.intakeLogs = new java.util.ArrayList<>();
                 }
 
                 // 3. Perform database operations inside a Room database transaction

@@ -373,8 +373,13 @@ public class SettingsFragment extends Fragment {
     private void updateDialogPhotoPreview(View dialogView, String uriString) {
         com.google.android.material.imageview.ShapeableImageView iv = dialogView.findViewById(R.id.iv_selected_custom_photo);
         if (uriString != null) {
-            iv.setImageURI(Uri.parse(uriString));
-            iv.setVisibility(View.VISIBLE);
+            try {
+                iv.setImageURI(Uri.parse(uriString));
+                iv.setVisibility(View.VISIBLE);
+            } catch (Exception e) {
+                Log.e(TAG, "Error setting dialog photo preview URI", e);
+                iv.setVisibility(View.GONE);
+            }
         } else {
             iv.setVisibility(View.GONE);
         }

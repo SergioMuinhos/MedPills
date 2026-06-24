@@ -87,7 +87,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
 
             // Set Avatar image resource or custom URI
             if (profile.getImageUri() != null) {
-                binding.ivAvatar.setImageURI(android.net.Uri.parse(profile.getImageUri()));
+                try {
+                    binding.ivAvatar.setImageURI(android.net.Uri.parse(profile.getImageUri()));
+                } catch (Exception e) {
+                    android.util.Log.e("ProfileAdapter", "Error setting custom profile image URI", e);
+                    binding.ivAvatar.setImageResource(R.drawable.avatar_default);
+                }
             } else {
                 String resName = profile.getAvatarResourceName();
                 int resId = binding.getRoot().getContext().getResources().getIdentifier(

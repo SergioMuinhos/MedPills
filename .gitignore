@@ -31,3 +31,7 @@ keystore.properties
 *.jks
 *.keystore
 
+# Local backup files
+medpills_backup.json
+
+
